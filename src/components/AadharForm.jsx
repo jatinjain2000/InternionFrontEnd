@@ -4,6 +4,8 @@ import "react-datepicker/dist/react-datepicker.css";
 import "./styles/aadharForm.css";
 import { useNavigate } from "react-router-dom";
 
+
+
 const AadharForm = () => {
   const navigateTo = useNavigate();
   const [dob, setDob] = React.useState(new Date());
