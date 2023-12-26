@@ -1,0 +1,48 @@
+.qrcode {
+    background-color: #fff;
+    border-radius: 30px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
+    position: relative;
+    overflow: hidden;
+    width: 700px;
+    max-width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-around; /* Adjust as needed */
+    flex-direction: column; /* Change to column if you want the headers to be stacked vertically */
+    height: 500px;
+    font-size: 18px;
+    margin: 90px auto;
+  }
+  .qrcode button {
+    background-color: #512da8;
+    color: #fff;
+    font-size: 18px;
+    padding: 10px 45px;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-top: 10px;
+    margin-bottom: 30px;
+    cursor: pointer;
+  
+  }
+  .qrcode input {
+    background-color: #eee;
+    border: none;
+    
+    padding: 10px 15px;
+    font-size:18px;
+    border-radius: 8px;
+    width: 20%;
+    
+    
+  
+  }
+  .qrcode h3 {
+    
+    margin: 20px 0;
+    font-size: 30px;
+  }
