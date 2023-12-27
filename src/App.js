@@ -31,8 +31,9 @@ function App() {
           <Route path="/loginotp" element={<LoginOtp />} />
           <Route path ="/verify" element={<Verify/>}/>
           <Route path = "/admin" element={<AdminConsole/>}/>
-          <Route path = "/admintile" element={<AdminTile/>}/>
+          
           <Route path="/userConsole" element={<UserConsole />} />
+          
         </Routes>
       </BrowserRouter>
     </>

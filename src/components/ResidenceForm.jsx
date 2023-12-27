@@ -4,6 +4,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import "./styles/residenceForm.css";
 import { useNavigate } from "react-router-dom";
 import { format } from 'date-fns';
+import axios from "axios";
  
 const ResidenceForm = () => {
   const navigateTo = useNavigate();
@@ -19,8 +20,9 @@ const ResidenceForm = () => {
   const [docForVerification, setVerification] = useState("");
  
   const dateOfRegister = format(date, 'MM/dd/yyyy');
+  const email = "negorib786@ubinert.com";
    
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
    
     const formData = {
@@ -32,9 +34,28 @@ const ResidenceForm = () => {
       placeOfRegister,
       dateOfRegister,
       docForVerification,
+      email:email
     };
    
     console.log("Form Data:", formData);
+    const response = await axios.post("http://localhost:8080/api/residenceform",{
+      name:name,
+      parent_name:ParentName,
+      village:village,
+      taluka:taluka,
+      district:district,
+      place_of_register:placeOfRegister,
+      date_of_register:dateOfRegister,
+      document_for_verify:docForVerification,
+      email:email
+    })
+
+    if(response.data == "added success"){
+      alert("Form submitted successfully!!!")
+    }
+    else{
+      alert("Form Not submitted😒")
+    }
   };
  
   return (
