@@ -10,6 +10,8 @@ import EmailOtp from './components/EmailOtp';
 import Qrcode from './components/Qrcode';
 import LoginOtp from './components/LoginOtp';
 import Verify from "./components/Verify";
+import AdminConsole from "./components/AdminConsole";
+import AdminTile from "./components/AdminTile";
 
 function App() {
   return (
@@ -27,6 +29,8 @@ function App() {
           <Route path="/qrcode" element={<Qrcode />} />
           <Route path="/loginotp" element={<LoginOtp />} />
           <Route path ="/verify" element={<Verify/>}/>
+          <Route path = "/admin" element={<AdminConsole/>}/>
+          <Route path = "/admintile" element={<AdminTile/>}/>
         </Routes>
       </BrowserRouter>
     </>
