@@ -20,10 +20,9 @@ export default function Verify() {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8081/users/email/${email}`
+          `http://localhost:8080/api/users/email/${email}`
         );
-       
-        setVerify(response.data.enabled);
+        setVerify(response.data.verify_email);
         setSecret(response.data.secret);
       } catch (error) {
         console.error("Error fetching user data:", error);
@@ -58,7 +57,7 @@ export default function Verify() {
               Congratulations!!! Email have been verified.
             </Alert>
  
-            <NavLink to="/qrcode" state={{ emailData: email , secretKey : secret}}>
+            <NavLink to="/qrcode" state={{ emailData: email }}>
               <Button
                 className="verify"
                 variant="contained"

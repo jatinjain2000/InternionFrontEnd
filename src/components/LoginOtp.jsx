@@ -1,12 +1,41 @@
 import React from 'react'
 import './styles/loginOtp.css'
-
+import { useState } from 'react';
+import axios from 'axios';
+import { useNavigate,useLocation } from 'react-router-dom';
 const LoginOtp = () => {
+  const[otp,setOtp] = useState("");
+  const navigateTo = useNavigate();
+  const location = useLocation();
+  const email = location.state.loginEmail;
+  async function validate() {
+    try {
+      const response = await axios.get(
+        `http://localhost:8080/api/register/otp/${email}/${otp}`
+    
+      );
+     
+      console.log(response.data);
+      if (response.data == true) {
+        alert("LOGIN SUCCESSFULL");
+        setOtp(""); 
+        navigateTo("/"); 
+
+      } else {
+        alert("Incorrect OTP");
+      }
+    } catch (error) {
+      console.error("Error verifying OTP:", error);
+      alert("Incorrect OTP");
+    } 
+  }
+  
+
   return (
     <div className='loginotp'>
         <h3>Enter the OTP</h3><br/>
-        <input type='text' placeholder=' Enter OTP'></input>
-        <button >Submit</button>
+        <input type='text' placeholder=' Enter OTP' onChange={(e)=>{setOtp(e.target.value)}}></input>
+        <button onClick={validate}>Submit</button>
     </div>
   )
 }

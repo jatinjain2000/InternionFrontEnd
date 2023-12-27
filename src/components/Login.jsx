@@ -21,11 +21,15 @@ const Login = () => {
   const[retest,setRetest] = useState(false);
   const [image,setImage] = useState("");
   const [test ,setTest] = useState(false)
+  const [submit, setSubmit] = useState(false);
   const navigate = useNavigate();
 
   //-----------------------Checkbox------------------------------------------------------
 
-  
+  const handleCheckboxChange = () => {
+    // Toggle the value of retest when the checkbox is clicked
+    setRetest(!retest);
+  };
   //---------------------------------------------------------------------------------------
 
 
@@ -34,14 +38,14 @@ const Login = () => {
     event.preventDefault();
     try {
       await axios.post("http://localhost:8080/api/register", {
-        username: name,
+        
         email: email,
         password: password,
       });
       alert("Email has been sent for verification");
       handleToggle();
 
-      setName("");
+      
       setEmail("");
       setPassword("");
       navigate("/verify", {state: {email: email}});
@@ -50,10 +54,46 @@ const Login = () => {
     }
   }
   //---------------------------------------------------------------------------------------
+  //---------------------Function for Login------------------------------------------------
+  async function save(event) {
+    event.preventDefault(); 
+    if(retest==true){
+    try {
+      const response = await axios.get(
+        `http://localhost:8080/api/signin/${loginEmail}/${loginPassword}`
+      );
+
+      console.log(response);
+
+      if (response.data !== "") {
+        // const userData = response.data.userId;
+        // localStorage.setItem("userData", JSON.stringify(userData));
+
+        setloginEmail("");
+        setloginPassword("");
+        navigate("/loginotp", { state: { loginEmail: response.data.email } });
+        
+      } else {
+        alert("Incorrect Email / password");
+      }
+    } catch (error) {
+      alert("Incorrect Email / password");
+    }
+  }
+  else{
+    alert("Captcha not validated")
+  }
+  }
+  //-----------------------------------------------------------------------------------
   //-------------Fucntion For random generation captcha-----------------------------------
   const randomNumberInRange = (min, max) => {
     return Math.floor(Math.random() * (max - min + 1)) + min;
   };
+  useEffect(() => {
+    if (loginEmail.length && loginPassword.length) {
+      setSubmit(true);
+    }
+  }, [loginEmail, loginPassword]);
 
   const num = randomNumberInRange(1, 5000);
   //----------------------------------------------------------------------------------------
@@ -82,6 +122,7 @@ const Login = () => {
         if(response.data == "Captcha is valid"){
           setRetest(true);
         }
+        
       }
       catch(error){
         alert("Incorrect Text");
@@ -124,7 +165,7 @@ const Login = () => {
               type="password"
               name="password"
               placeholder="Password"
-              pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.{5,})"
+              // pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.{5,})"
               title="Password must be 5-12 characters long and include at least one lowercase letter, one uppercase letter, one numeric digit, and one special character (!@#$%^&*)"
               onChange={(e) => {
                 setPassword(e.target.value);
@@ -148,7 +189,7 @@ const Login = () => {
             <input
               type="password"
               placeholder="Password"
-              pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.{8,})"
+              // pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.{8,})"
               title="Password must be 8-12 characters long and include at least one lowercase letter, one uppercase letter, one numeric digit, and one special character (!@#$%^&*)"
               required
               onChange={(e) => {
@@ -164,6 +205,8 @@ const Login = () => {
                 style={{ borderRadius: "1 0px", marginTop: "10px" }}
               />
               <CachedIcon style={{margin:"auto 10px", fontSize:"30px"}}  onClick={()=>setTest(!test)}></CachedIcon>
+              <input style={{ margin: "auto 10px", width: "20px", height: "20px" }} type="checkbox" disabled checked={retest} onChange={handleCheckboxChange} />
+
               <input
                 type="text"
                 placeholder="Enter Captcha"
@@ -171,11 +214,17 @@ const Login = () => {
                 onChange={(e) => {
                     setrecaptchaText(e.target.value);
                   }}
+                 
               />
+              
+              <br></br>
+              
+              
             </div>
+            <div style={{marginTop:"20px"}} onClick={validate}> <button type="button" >Check</button></div>
 
             
-            <button style={{"marginTop":"30px"}}>Sign In</button>
+            <button style={{"marginTop":"30px"}}  disabled={!submit} onClick={save}>Sign In</button>
           </form>
         )}
       </div>
