@@ -26,6 +26,7 @@ export default function Navbar() {
               ></img>
             </Button>
           </Typography>
+          <Button color="inherit" onClick={()=>navigateTo("/userConsole")}>User Console</Button> &nbsp;&nbsp;
           <Button color="inherit" onClick={()=>navigateTo("/login")}>Login / Register</Button>
         </Toolbar>
       </AppBar>

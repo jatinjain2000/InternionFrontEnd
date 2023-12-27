@@ -3,61 +3,40 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "./styles/residenceForm.css";
 import { useNavigate } from "react-router-dom";
-import html2canvas from 'html2canvas';
-import jsPDF from 'jspdf';
-
+import { format } from 'date-fns';
+ 
 const ResidenceForm = () => {
   const navigateTo = useNavigate();
-  const [startDate, setStartDate] = React.useState(new Date());
-  const downloadPDF = ()=>{
-    const capture = document.querySelector('.residence-form-container');
-
-    html2canvas(capture).then((canvas)=>{
-      const imgData = canvas.toDataURL('img/png');
-      const page = new jsPDF('p','mm','a4');
-      const componentWidth = page.internal.pageSize.getWidth();
-      const componentHeight = page.internal.pageSize.getHeight();
-      page.addImage(imgData,'PNG',0,0,componentWidth,componentHeight);
-      page.save('new.pdf');
-
-    }) 
-  }
-  // const downloadPDF = () => {
-  //   const capture = document.querySelector('.residence-form-container');
-  
-    // html2canvas(capture).then((canvas) => {
-    //   const imgData = canvas.toDataURL('image/png');
-    //   const pdf = new jsPDF('p', 'mm', 'a4');
-    //   const componentWidth = pdf.internal.pageSize.getWidth();
-    //   const componentHeight = pdf.internal.pageSize.getHeight();
-    //   pdf.addImage(imgData, 'PNG', 0, 0, componentWidth, componentHeight);
-  
-      // Convert the PDF content to a Blob
-      // const pdfBlob = pdf.output('blob');
-  
-      // Create a FormData object to send the Blob to the server
-      // const formData = new FormData();
-      // formData.append('pdfFile', pdfBlob, 'generated.pdf');
-  
-      // Send the PDF Blob to the server using Axios
-      // axios.post('http://localhost:8080/upload', formData)
-      //   .then(response => {
-      //     console.log('File uploaded successfully', response.data);
-      //     // Handle any additional logic after successful upload
-      //   })
-      //   .catch(error => {
-      //     console.error('Error uploading file', error);
-      //     // Handle errors
-      //   });
-    // });
-  
-
-
+ 
+  // State variables for form fields
+  const [name, setName] = useState("");
+  const [ParentName, setParentName] = useState("");
+  const [village, setVillage] = useState("");
+  const [taluka, setTaluka] = useState("");
+  const [district, setDistrict] = useState("");
+  const [placeOfRegister, setPlace] = useState("");
+  const [date, setDate] = useState(new Date());
+  const [docForVerification, setVerification] = useState("");
+ 
+  const dateOfRegister = format(date, 'MM/dd/yyyy');
+   
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Add your form submission logic here
+   
+    const formData = {
+      name,
+      ParentName,
+      village,
+      taluka,
+      district,
+      placeOfRegister,
+      dateOfRegister,
+      docForVerification,
+    };
+   
+    console.log("Form Data:", formData);
   };
-
+ 
   return (
     <div className="residence-form-container">
       <h2>Residence Certificate Form</h2>
@@ -69,7 +48,14 @@ const ResidenceForm = () => {
                 <label htmlFor="name">Name of the person:</label>
               </td>
               <td>
-                <input type="text" id="name" className="input-field" required />
+                <input
+                  type="text"
+                  id="name"
+                  className="input-field"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  required
+                />
               </td>
             </tr>
             <tr>
@@ -77,15 +63,14 @@ const ResidenceForm = () => {
                 <label htmlFor="so_wo">Father's Name</label>
               </td>
               <td>
-                <input type="text" id="so_wo" className="input-field" required />
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <label htmlFor="so_wo">Mother's Name</label>
-              </td>
-              <td>
-                <input type="text" id="so_wo" className="input-field" required />
+                <input
+                  type="text"
+                  id="so_wo"
+                  className="input-field"
+                  value={ParentName}
+                  onChange={(e) => setParentName(e.target.value)}
+                  required
+                />
               </td>
             </tr>
             <tr>
@@ -93,7 +78,14 @@ const ResidenceForm = () => {
                 <label htmlFor="village">Village:</label>
               </td>
               <td>
-                <input type="text" id="village" className="input-field" required />
+                <input
+                  type="text"
+                  id="village"
+                  className="input-field"
+                  value={village}
+                  onChange={(e) => setVillage(e.target.value)}
+                  required
+                />
               </td>
             </tr>
             <tr>
@@ -101,7 +93,14 @@ const ResidenceForm = () => {
                 <label htmlFor="taluka">Taluka:</label>
               </td>
               <td>
-                <input type="text" id="taluka" className="input-field" required />
+                <input
+                  type="text"
+                  id="taluka"
+                  className="input-field"
+                  value={taluka}
+                  onChange={(e) => setTaluka(e.target.value)}
+                  required
+                />
               </td>
             </tr>
             <tr>
@@ -109,7 +108,14 @@ const ResidenceForm = () => {
                 <label htmlFor="district">District:</label>
               </td>
               <td>
-                <input type="text" id="district" className="input-field" required />
+                <input
+                  type="text"
+                  id="district"
+                  className="input-field"
+                  value={district}
+                  onChange={(e) => setDistrict(e.target.value)}
+                  required
+                />
               </td>
             </tr>
             <tr>
@@ -117,7 +123,14 @@ const ResidenceForm = () => {
                 <label htmlFor="place">Place of Registration:</label>
               </td>
               <td>
-                <input type="text" id="place" className="input-field" required />
+                <input
+                  type="text"
+                  id="place"
+                  className="input-field"
+                  value={placeOfRegister}
+                  onChange={(e) => setPlace(e.target.value)}
+                  required
+                />
               </td>
             </tr>
             <tr>
@@ -126,8 +139,8 @@ const ResidenceForm = () => {
               </td>
               <td>
                 <DatePicker
-                  selected={startDate}
-                  onChange={(date) => setStartDate(date)}
+                  selected={date}
+                  onChange={(date) => setDate(date)}
                   dateFormat="dd/MM/yyyy"
                   className="input-field date-picker"
                   required
@@ -139,7 +152,14 @@ const ResidenceForm = () => {
                 <label htmlFor="verification">Document for Verification:</label>
               </td>
               <td>
-                <input type="text" id="verification" className="input-field" required />
+                <input
+                  type="text"
+                  id="verification"
+                  className="input-field"
+                  value={docForVerification}
+                  onChange={(e) => setVerification(e.target.value)}
+                  required
+                />
               </td>
             </tr>
             <tr>
@@ -155,13 +175,6 @@ const ResidenceForm = () => {
                 >
                   Go back
                 </button>
-                <button
-                  type="button"
-                  className="submit-button"
-                  onClick={downloadPDF}
-                >
-                  Generate PDF
-                </button>
               </td>
             </tr>
           </tbody>
@@ -170,5 +183,6 @@ const ResidenceForm = () => {
     </div>
   );
 };
-
+ 
 export default ResidenceForm;
+ 

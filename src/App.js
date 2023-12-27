@@ -12,6 +12,7 @@ import LoginOtp from './components/LoginOtp';
 import Verify from "./components/Verify";
 import AdminConsole from "./components/AdminConsole";
 import AdminTile from "./components/AdminTile";
+import UserConsole from "./components/UserConsole";
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
           <Route path ="/verify" element={<Verify/>}/>
           <Route path = "/admin" element={<AdminConsole/>}/>
           <Route path = "/admintile" element={<AdminTile/>}/>
+          <Route path="/userConsole" element={<UserConsole />} />
         </Routes>
       </BrowserRouter>
     </>
