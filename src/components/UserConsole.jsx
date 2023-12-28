@@ -12,9 +12,15 @@ import UserModel from "./UserModel";
 
 function UserConsole() {
   const [data, setData] = useState([]);
-  const email = "mikog57667@ubinert.com";
+
   const [showModal, setShowModal] = useState(false);
   const [users, setUsers] = useState([]);
+
+  const emailData = localStorage.getItem("userEmail") 
+  const email = emailData.substring(1, emailData.length - 1) 
+  console.log(email);
+
+ 
 
   useEffect(() => {
     const fetchData = async () => {
@@ -36,9 +42,7 @@ function UserConsole() {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await axios.get(
-          "http://localhost:8080/api/getdata"
-        );
+        const response = await axios.get("http://localhost:8080/api/getdata");
         setUsers(response.data);
 
         console.log(response.data);
@@ -53,17 +57,38 @@ function UserConsole() {
   const handleSendPDF = () => {
     setShowModal(true);
   };
+  const upload = async () =>{
+    window.location.href = "http://localhost:8080/drive/googlesignin";
+    await axios.get("http://localhost:8080/drive/create/mktintumon@gmail.com");
+  }
 
-  // const downloadPDF = () => {
-  //   // Implement download logic
-  // };
+  const downloadPDF = async (fileName, username) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:8080/api/download?fileName=${fileName}&username=${username}`,
+        {
+          responseType: "blob",
+        }
+      );
+
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", fileName);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (error) {
+      console.error("Error downloading PDF:", error);
+    }
+  };
 
   const handleCloseModal = () => {
     setShowModal(false);
   };
 
   const handleSendMail = (selectedUsers) => {
-    // Implement logic to send mail to selected users
+    
     console.log("Sending mail to selected users:", selectedUsers);
   };
 
@@ -105,19 +130,15 @@ function UserConsole() {
               filename={item.filename}
               permission={item.permission}
               handleSendPDF={handleSendPDF}
+              downloadPDF={downloadPDF}
               showModal={showModal}
               handleCloseModal={handleCloseModal}
               handleSendMail={handleSendMail}
               users={users}
+              upload={upload}
             />
           );
         })}
-        {/* "id": 9,
-        "count": 2,
-        "username": "jatin",
-        "filename": "jatin-2",
-        "permission": false,
-        "email": "negorib786@ubinert.com" */}
       </MDBTable>
     </>
   );
@@ -129,9 +150,11 @@ const Box = ({
   permission,
   handleSendPDF,
   showModal,
+  downloadPDF,
   handleCloseModal,
   handleSendMail,
   users,
+  upload
 }) => {
   const request = async () => {
     await axios.post("http://localhost:8080/api/approveuserpermission", {
@@ -192,7 +215,7 @@ const Box = ({
                     style={{ fontSize: "1rem" }}
                     color="link"
                     rounded
-                    // onClick={downloadPDF}
+                    onClick={() => downloadPDF(filename + ".pdf", username)}
                   >
                     Download
                   </MDBBtn>
@@ -218,6 +241,7 @@ const Box = ({
                     style={{ fontSize: "1rem" }}
                     color="link"
                     rounded
+                    onClick={upload}
                   >
                     Drive Upload
                   </MDBBtn>

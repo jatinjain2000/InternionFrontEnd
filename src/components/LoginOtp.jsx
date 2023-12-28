@@ -20,7 +20,7 @@ const LoginOtp = () => {
         alert("LOGIN SUCCESSFULL");
         setOtp(""); 
         navigateTo("/"); 
-
+        window.location.reload();
       } else {
         alert("Incorrect OTP");
       }

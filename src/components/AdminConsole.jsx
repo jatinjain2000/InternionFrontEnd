@@ -11,6 +11,8 @@ import axios from "axios";
 
 function UserConsole() {
   const [data, setData] = useState([]);
+  const [rerender, setRerender] = useState(false);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -19,6 +21,7 @@ function UserConsole() {
         );
 
         setData(response.data);
+        setRerender(!rerender);
         console.log(response.data);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -26,7 +29,7 @@ function UserConsole() {
     };
 
     fetchData();
-  }, []);
+  }, [rerender]);
 
   return (
     <>
@@ -125,7 +128,7 @@ const Box = ({ email, filename, permission }) => {
                 onClick={approve}
                 rounded
               >
-                Approve
+                {permission == 0 ? "APPROVE" : "APPROVED"}
               </MDBBtn>
             </div>
           </td>

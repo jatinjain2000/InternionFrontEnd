@@ -66,8 +66,15 @@ const Login = () => {
       console.log(response);
 
       if (response.data !== "") {
-        // const userData = response.data.userId;
-        // localStorage.setItem("userData", JSON.stringify(userData));
+        const userId = response.data.id;
+        const userEmail = response.data.email;
+        localStorage.setItem("userId", JSON.stringify(userId));
+        localStorage.setItem("userEmail", JSON.stringify(userEmail));
+        localStorage.setItem("admin", false);
+
+        if(response.data.email == "jatinjain.2011@gmail.com"){
+          localStorage.setItem("admin", true);
+        }
 
         setloginEmail("");
         setloginPassword("");
@@ -77,7 +84,7 @@ const Login = () => {
         alert("Incorrect Email / password");
       }
     } catch (error) {
-      alert("Incorrect Email / password");
+      alert("User Already Exists");
     }
   }
   else{

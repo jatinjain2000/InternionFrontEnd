@@ -20,8 +20,12 @@ const ResidenceForm = () => {
   const [docForVerification, setVerification] = useState("");
  
   const dateOfRegister = format(date, 'MM/dd/yyyy');
-  const email = "mikog57667@ubinert.com";
-   
+
+  const emailData = localStorage.getItem("userEmail")
+  const email = emailData.substring(1, emailData.length - 1);
+
+ 
+
   const handleSubmit = async (e) => {
     e.preventDefault();
    
