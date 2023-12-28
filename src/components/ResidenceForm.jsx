@@ -20,7 +20,7 @@ const ResidenceForm = () => {
   const [docForVerification, setVerification] = useState("");
  
   const dateOfRegister = format(date, 'MM/dd/yyyy');
-  const email = "negorib786@ubinert.com";
+  const email = "mikog57667@ubinert.com";
    
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -56,6 +56,17 @@ const ResidenceForm = () => {
     else{
       alert("Form Not submitted😒")
     }
+
+    setName("")
+    setParentName("");
+    setVillage("")
+    setTaluka("")
+    setDistrict("")
+    setPlace("");
+    setDate(new Date())
+    setVerification("")
+
+    navigateTo("/userConsole");
   };
  
   return (

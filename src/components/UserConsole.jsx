@@ -6,16 +6,15 @@ import {
   MDBTableHead,
   MDBTableBody,
 } from "mdb-react-ui-kit";
-import { useState } from "react";
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import UserModel from "./UserModel";
 
 function UserConsole() {
   const [data, setData] = useState([]);
-  const email = "negorib786@ubinert.com";
+  const email = "mikog57667@ubinert.com";
   const [showModal, setShowModal] = useState(false);
-  const[users,setUsers] = useState([]);
+  const [users, setUsers] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -41,7 +40,7 @@ function UserConsole() {
           "http://localhost:8080/api/getdata"
         );
         setUsers(response.data);
-        
+
         console.log(response.data);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -54,6 +53,10 @@ function UserConsole() {
   const handleSendPDF = () => {
     setShowModal(true);
   };
+
+  // const downloadPDF = () => {
+  //   // Implement download logic
+  // };
 
   const handleCloseModal = () => {
     setShowModal(false);
@@ -96,17 +99,17 @@ function UserConsole() {
 
         {data.map((item, id) => {
           return (
-             <Box
-            key={item.id}
-            username={item.username}
-            filename={item.filename}
-            permission={item.permission}
-            handleSendPDF={handleSendPDF}
-            showModal={showModal}
-            handleCloseModal={handleCloseModal}
-            handleSendMail={handleSendMail}
-            users = {users}
-          />
+            <Box
+              key={item.id}
+              username={item.username}
+              filename={item.filename}
+              permission={item.permission}
+              handleSendPDF={handleSendPDF}
+              showModal={showModal}
+              handleCloseModal={handleCloseModal}
+              handleSendMail={handleSendMail}
+              users={users}
+            />
           );
         })}
         {/* "id": 9,
@@ -120,7 +123,24 @@ function UserConsole() {
   );
 }
 
-const Box = ({ username, filename, permission, handleSendPDF, showModal, handleCloseModal, handleSendMail,users }) => {
+const Box = ({
+  username,
+  filename,
+  permission,
+  handleSendPDF,
+  showModal,
+  handleCloseModal,
+  handleSendMail,
+  users,
+}) => {
+  const request = async () => {
+    await axios.post("http://localhost:8080/api/approveuserpermission", {
+      sender: username,
+      filename: filename,
+    });
+    alert("Mail has been sent to the admin for approval");
+  };
+
   return (
     <>
       <MDBTableBody style={{ textAlign: "center" }}>
@@ -138,18 +158,17 @@ const Box = ({ username, filename, permission, handleSendPDF, showModal, handleC
               color="link"
               rounded
             >
-              <MDBBadge pill>
+              <MDBBadge
+                pill
+                class={
+                  permission == 0
+                    ? "badge badge-warning"
+                    : "badge badge-success"
+                }
+              >
                 {permission == 0 ? "Pending" : "Approved"}
               </MDBBadge>
             </MDBBtn>
-            {/* <MDBBtn
-              className="text mb-1"
-              style={{ fontSize: "1.2rem" }}
-              color="link"
-              rounded
-            >
-              <MDBBadge pill>Pending</MDBBadge>
-            </MDBBtn> */}
           </td>
 
           <td>
@@ -159,6 +178,7 @@ const Box = ({ username, filename, permission, handleSendPDF, showModal, handleC
                   className="text mb-1"
                   style={{ fontSize: "1rem" }}
                   color="link"
+                  onClick={request}
                   rounded
                 >
                   Request Permission
@@ -172,6 +192,7 @@ const Box = ({ username, filename, permission, handleSendPDF, showModal, handleC
                     style={{ fontSize: "1rem" }}
                     color="link"
                     rounded
+                    // onClick={downloadPDF}
                   >
                     Download
                   </MDBBtn>
@@ -186,9 +207,11 @@ const Box = ({ username, filename, permission, handleSendPDF, showModal, handleC
                   </MDBBtn>
                   <UserModel
                     users={users}
+                    username={username}
                     showModal={showModal}
                     handleClose={handleCloseModal}
                     handleSend={handleSendMail}
+                    filename={filename}
                   />
                   <MDBBtn
                     className="text mb-1"
