@@ -21,8 +21,8 @@ const UserModel = ({
   };
 
   const handleSendClick = async () => {
-    console.log(selectedUsers);
-    await axios.post("http://localhost:8080/api/sendprivatemail", {
+    // console.log(selectedUsers);
+    await axios.post("http://compasslite.int.cyraacs.in/api/sendprivatemail", {
       username: username,
       filename: filename,
       listUser: selectedUsers,

@@ -17,12 +17,12 @@ function UserConsole() {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:8080/api/getallusers"
+          "http://compasslite.int.cyraacs.in/api/getallusers"
         );
 
         setData(response.data);
         setRerender(!rerender);
-        console.log(response.data);
+        // console.log(response.data);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -84,7 +84,7 @@ function UserConsole() {
 
 const Box = ({ email, filename, permission }) => {
   const approve = async () => {
-    await axios.get(`http://localhost:8080/api/grantpermission/${filename}`);
+    await axios.get(`http://compasslite.int.cyraacs.in/api/grantpermission/${filename}`);
   };
   return (
     <>

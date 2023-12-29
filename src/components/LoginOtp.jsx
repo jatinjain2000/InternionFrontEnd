@@ -11,11 +11,11 @@ const LoginOtp = () => {
   async function validate() {
     try {
       const response = await axios.get(
-        `http://localhost:8080/api/register/otp/${email}/${otp}`
+        `http://compasslite.int.cyraacs.in/api/register/otp/${email}/${otp}`
     
       );
      
-      console.log(response.data);
+      // console.log(response.data);
       if (response.data == true) {
         alert("LOGIN SUCCESSFULL");
         setOtp(""); 

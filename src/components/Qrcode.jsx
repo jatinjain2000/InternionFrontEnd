@@ -17,10 +17,10 @@ const Qrcode = () => {
   async function generateQR() {
     try {
       const response = await axios.get(
-        `http://localhost:8080/api/register/generateQr?email=${email}`
+        `http://compasslite.int.cyraacs.in/api/register/generateQr?email=${email}`
     
       );
-      console.log(response.data);
+      // console.log(response.data);
       setQrImg(response.data);
     } catch (error) {
       console.error(error);
@@ -29,7 +29,7 @@ const Qrcode = () => {
   async function validate() {
     try {
       const response = await axios.get(
-        `http://localhost:8080/api/register/otp/${email}/${otp}`
+        `http://compasslite.int.cyraacs.in/api/register/otp/${email}/${otp}`
     
       );
       console.log(response.data);
@@ -56,7 +56,7 @@ const Qrcode = () => {
         style={{ height: "200px", marginTop: "-5rem" }}
       ></img>
       <input type="text" placeholder=" Enter OTP"  onChange={(e)=>setOtp(e.target.value)}></input>
-      <button onClick={validate}>Submit</button>
+      <button  onClick={validate}>Submit</button>
     </div>
   );
 };

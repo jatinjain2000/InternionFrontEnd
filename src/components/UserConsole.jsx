@@ -18,7 +18,7 @@ function UserConsole() {
 
   const emailData = localStorage.getItem("userEmail") 
   const email = emailData.substring(1, emailData.length - 1) 
-  console.log(email);
+  // console.log(email);
 
  
 
@@ -26,11 +26,11 @@ function UserConsole() {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8080/api/getfilebyemail/${email}`
+          `http://compasslite.int.cyraacs.in/api/getfilebyemail/${email}`
         );
 
         setData(response.data);
-        console.log(response.data);
+        // console.log(response.data);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -42,10 +42,10 @@ function UserConsole() {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await axios.get("http://localhost:8080/api/getdata");
+        const response = await axios.get("http://compasslite.int.cyraacs.in/api/getdata");
         setUsers(response.data);
 
-        console.log(response.data);
+        // console.log(response.data);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -58,14 +58,15 @@ function UserConsole() {
     setShowModal(true);
   };
   const upload = async () =>{
-    window.location.href = "http://localhost:8080/drive/googlesignin";
-    await axios.get("http://localhost:8080/drive/create/mktintumon@gmail.com");
+    window.location.href = "http://compasslite.int.cyraacs.in/drive/googlesignin";
+    await axios.get("http://compasslite.int.cyraacs.in/drive/create/mktintumon@gmail.com");
+    alert("All files have been uploaded")
   }
 
   const downloadPDF = async (fileName, username) => {
     try {
       const response = await axios.get(
-        `http://localhost:8080/api/download?fileName=${fileName}&username=${username}`,
+        `http://compasslite.int.cyraacs.in/api/download?fileName=${fileName}&username=${username}`,
         {
           responseType: "blob",
         }
@@ -89,7 +90,7 @@ function UserConsole() {
 
   const handleSendMail = (selectedUsers) => {
     
-    console.log("Sending mail to selected users:", selectedUsers);
+    // console.log("Sending mail to selected users:", selectedUsers);
   };
 
   return (
@@ -157,7 +158,7 @@ const Box = ({
   upload
 }) => {
   const request = async () => {
-    await axios.post("http://localhost:8080/api/approveuserpermission", {
+    await axios.post("http://compasslite.int.cyraacs.in/api/approveuserpermission", {
       sender: username,
       filename: filename,
     });

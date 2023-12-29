@@ -13,14 +13,14 @@ export default function Verify() {
  
   const location = useLocation();
   const email = location.state.email;
-  console.log(email);
+  // console.log(email);
  
  
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8080/api/users/email/${email}`
+          `http://compasslite.int.cyraacs.in/api/users/email/${email}`
         );
         setVerify(response.data.verify_email);
         setSecret(response.data.secret);
@@ -62,6 +62,7 @@ export default function Verify() {
                 className="verify"
                 variant="contained"
                 color="success"
+                style={{marginLeft:"3rem"}}
               >
                 Proceed for QR-Scan
               </Button>

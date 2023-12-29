@@ -37,7 +37,7 @@ const Login = () => {
   async function onHandleSubmit(event) {
     event.preventDefault();
     try {
-      await axios.post("http://localhost:8080/api/register", {
+      await axios.post("http://compasslite.int.cyraacs.in/api/register", {
         
         email: email,
         password: password,
@@ -60,10 +60,10 @@ const Login = () => {
     if(retest==true){
     try {
       const response = await axios.get(
-        `http://localhost:8080/api/signin/${loginEmail}/${loginPassword}`
+        `http://compasslite.int.cyraacs.in/api/signin/${loginEmail}/${loginPassword}`
       );
 
-      console.log(response);
+      // console.log(response);
 
       if (response.data !== "") {
         const userId = response.data.id;
@@ -72,7 +72,10 @@ const Login = () => {
         localStorage.setItem("userEmail", JSON.stringify(userEmail));
         localStorage.setItem("admin", false);
 
-        if(response.data.email == "jatinjain.2011@gmail.com"){
+        // if(response.data.email == "jatinjain.2011@gmail.com"){
+        //   localStorage.setItem("admin", true);
+        // }
+        if (response.data.email === "jatinjain.2011@gmail.com") {
           localStorage.setItem("admin", true);
         }
 
@@ -110,9 +113,9 @@ const Login = () => {
        
         const rn = randomNumberInRange(1, 5000)
         setRanNum(rn)
-        console.log(rn);
-        const response = await axios.get(`http://localhost:8080/api/generate/${rn}`);
-        console.log(response);
+        // console.log(rn);
+        const response = await axios.get(`http://compasslite.int.cyraacs.in/api/generate/${rn}`);
+        // console.log(response);
         setImage(response.data.imageUrl);
         setRetest(false);
         // randomNumberInRange(1,5000);
@@ -123,9 +126,9 @@ const Login = () => {
   //-----------------------to verify the captcha -----------------------------------------------
   async function validate(event){
       try{
-        console.log(ranNum);
-        const response = await axios.post(`http://localhost:8080/api/validate/${ranNum}?enteredText=${recaptchaText}`);
-        console.log(response);
+        // console.log(ranNum);
+        const response = await axios.post(`http://compasslite.int.cyraacs.in/api/validate/${ranNum}?enteredText=${recaptchaText}`);
+        // console.log(response);
         if(response.data == "Captcha is valid"){
           setRetest(true);
         }

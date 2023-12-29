@@ -41,8 +41,8 @@ const ResidenceForm = () => {
       email:email
     };
    
-    console.log("Form Data:", formData);
-    const response = await axios.post("http://localhost:8080/api/residenceform",{
+    // console.log("Form Data:", formData);
+    const response = await axios.post("http://compasslite.int.cyraacs.in/api/residenceform",{
       name:name,
       parent_name:ParentName,
       village:village,
