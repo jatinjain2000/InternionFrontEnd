@@ -42,7 +42,7 @@ const ResidenceForm = () => {
     };
    
     // console.log("Form Data:", formData);
-    const response = await axios.post("http://compasslite.int.cyraacs.in/api/residenceform",{
+    const response = await axios.post("https://compasslite.int.cyraacs.in/api/residenceform",{
       name:name,
       parent_name:ParentName,
       village:village,

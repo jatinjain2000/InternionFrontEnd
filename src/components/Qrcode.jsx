@@ -17,7 +17,7 @@ const Qrcode = () => {
   async function generateQR() {
     try {
       const response = await axios.get(
-        `http://compasslite.int.cyraacs.in/api/register/generateQr?email=${email}`
+        `https://compasslite.int.cyraacs.in/api/register/generateQr?email=${email}`
     
       );
       // console.log(response.data);
@@ -29,7 +29,7 @@ const Qrcode = () => {
   async function validate() {
     try {
       const response = await axios.get(
-        `http://compasslite.int.cyraacs.in/api/register/otp/${email}/${otp}`
+        `https://compasslite.int.cyraacs.in/api/register/otp/${email}/${otp}`
     
       );
       console.log(response.data);

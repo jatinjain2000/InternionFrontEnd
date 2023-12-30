@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 import axios from "axios";
+import toast, { Toaster } from "react-hot-toast";
+import { SpinnerCircular } from 'spinners-react';
 
 const UserModel = ({
   username,
@@ -11,6 +13,7 @@ const UserModel = ({
   handleSend,
 }) => {
   const [selectedUsers, setSelectedUsers] = useState([]);
+  const[loading,setLoading] = useState(false);
 
   const handleCheckboxChange = (userEmail) => {
     const updatedSelection = selectedUsers.includes(userEmail)
@@ -21,18 +24,27 @@ const UserModel = ({
   };
 
   const handleSendClick = async () => {
+    setLoading(true)
     // console.log(selectedUsers);
-    await axios.post("http://compasslite.int.cyraacs.in/api/sendprivatemail", {
+    await axios.post("https://compasslite.int.cyraacs.in/api/sendprivatemail", {
       username: username,
       filename: filename,
       listUser: selectedUsers,
     });
     handleSend(selectedUsers);
-    alert("Mail has been sent to selected users");
+    setLoading(false);
+    toast("📧 Mail has been sent to selected users", {
+      style: {
+        borderRadius: "10px",
+        background: "#333",
+        color: "#fff",
+      },
+    });
     handleClose();
   };
 
   return (
+    <>
     <Modal  style={{width:"100rem"}} show={showModal} onHide={handleClose}>
       <Modal.Header closeButton>
         <Modal.Title>Select Users</Modal.Title>
@@ -55,10 +67,17 @@ const UserModel = ({
           Close
         </Button>
         <Button variant="primary" onClick={handleSendClick}>
-          Send
+        {loading ? (
+            <SpinnerCircular color={'#ffffff'} loading={loading} size={20} />
+          ) : (
+            'Send'
+          )}
+          
         </Button>
       </Modal.Footer>
     </Modal>
+    <Toaster />
+    </>
   );
 };
 

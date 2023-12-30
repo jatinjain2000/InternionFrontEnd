@@ -17,7 +17,7 @@ function UserConsole() {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          "http://compasslite.int.cyraacs.in/api/getallusers"
+          "https://compasslite.int.cyraacs.in/api/getallusers"
         );
 
         setData(response.data);
@@ -84,7 +84,7 @@ function UserConsole() {
 
 const Box = ({ email, filename, permission }) => {
   const approve = async () => {
-    await axios.get(`http://compasslite.int.cyraacs.in/api/grantpermission/${filename}`);
+    await axios.get(`https://compasslite.int.cyraacs.in/api/grantpermission/${filename}`);
   };
   return (
     <>

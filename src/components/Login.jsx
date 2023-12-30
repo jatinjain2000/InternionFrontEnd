@@ -4,9 +4,11 @@ import axios from "axios";
 import { useEffect } from "react";
 import CachedIcon from '@mui/icons-material/Cached';
 import { useNavigate } from "react-router-dom";
+import { SpinnerCircular } from 'spinners-react';
 
 const Login = () => {
   const [isSignUpActive, setSignUpActive] = useState(true);
+  const[loading,setLoading] = useState(false);
 
   const handleToggle = () => {
     setSignUpActive(!isSignUpActive);
@@ -24,6 +26,28 @@ const Login = () => {
   const [submit, setSubmit] = useState(false);
   const navigate = useNavigate();
 
+  const [passwordValid, setPasswordValid] = useState(false);
+  const [passwordErrorMessage, setPasswordErrorMessage] = useState("");
+
+  const isValidPassword = (value) => {
+    const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.{6,})/;
+    return regex.test(value);
+  };
+
+  const handlePasswordChange = (value) => {
+    setPassword(value);
+    setPasswordValid(isValidPassword(value));
+
+    if (!isValidPassword(value)) {
+      setPasswordErrorMessage(
+        <i style={{color:"#FA8072" , textAlign:"justify"}}>"Password must be 6-12 characters with at least one lowercase, uppercase, digit, and special character." </i>
+      );
+    } else {
+      setPasswordErrorMessage("");
+    }
+  };
+
+
   //-----------------------Checkbox------------------------------------------------------
 
   const handleCheckboxChange = () => {
@@ -36,21 +60,32 @@ const Login = () => {
   //-------------------- FUNCTION FOR SIGNUP -------------------------------------------
   async function onHandleSubmit(event) {
     event.preventDefault();
+    setLoading(true);
     try {
-      await axios.post("http://compasslite.int.cyraacs.in/api/register", {
+      const response = await axios.post("https://compasslite.int.cyraacs.in/api/register", {
         
         email: email,
         password: password,
       });
-      alert("Email has been sent for verification");
-      handleToggle();
 
+      if(response.data === "success"){
+        alert("Email has been sent for verification");
+        handleToggle();
+
+        
+        setEmail("");
+        setPassword("");
+        navigate("/verify", {state: {email: email}});
+      }
+
+      if(response.data === "User already exist"){
+        alert("User already exists!!!")
+      }
       
-      setEmail("");
-      setPassword("");
-      navigate("/verify", {state: {email: email}});
     } catch (err) {
       alert("User Registation Failed😢");
+    } finally{
+      setLoading(false);
     }
   }
   //---------------------------------------------------------------------------------------
@@ -60,7 +95,7 @@ const Login = () => {
     if(retest==true){
     try {
       const response = await axios.get(
-        `http://compasslite.int.cyraacs.in/api/signin/${loginEmail}/${loginPassword}`
+        `https://compasslite.int.cyraacs.in/api/signin/${loginEmail}/${loginPassword}`
       );
 
       // console.log(response);
@@ -114,7 +149,7 @@ const Login = () => {
         const rn = randomNumberInRange(1, 5000)
         setRanNum(rn)
         // console.log(rn);
-        const response = await axios.get(`http://compasslite.int.cyraacs.in/api/generate/${rn}`);
+        const response = await axios.get(`https://compasslite.int.cyraacs.in/api/generate/${rn}`);
         // console.log(response);
         setImage(response.data.imageUrl);
         setRetest(false);
@@ -127,7 +162,7 @@ const Login = () => {
   async function validate(event){
       try{
         // console.log(ranNum);
-        const response = await axios.post(`http://compasslite.int.cyraacs.in/api/validate/${ranNum}?enteredText=${recaptchaText}`);
+        const response = await axios.post(`https://compasslite.int.cyraacs.in/api/validate/${ranNum}?enteredText=${recaptchaText}`);
         // console.log(response);
         if(response.data == "Captcha is valid"){
           setRetest(true);
@@ -153,14 +188,7 @@ const Login = () => {
             {/* SIGNUP */}
             <h1>Create Account</h1>
 
-            {/* <input
-              type="text"
-              name="name"
-              placeholder="Name"
-              onChange={(e) => {
-                setName(e.target.value);
-              }}
-            /> */}
+            
             <input
               type="email"
               name="email"
@@ -175,15 +203,23 @@ const Login = () => {
               type="password"
               name="password"
               placeholder="Password"
-              // pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.{5,})"
-              title="Password must be 5-12 characters long and include at least one lowercase letter, one uppercase letter, one numeric digit, and one special character (!@#$%^&*)"
-              onChange={(e) => {
-                setPassword(e.target.value);
-              }}
+              pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.{5,})"
+              title="Password must be 6-12 characters long and include at least one lowercase letter, one uppercase letter, one numeric digit, and one special character (!@#$%^&*)"
+              onChange={(e) => handlePasswordChange(e.target.value)}
               required
-
             />
-            <button onClick={onHandleSubmit}>Sign up</button>
+            {passwordErrorMessage && (
+              <div className="error-message">{passwordErrorMessage}</div>
+            )}
+            <button onClick={onHandleSubmit} disabled={!passwordValid}>
+            {loading ? (
+            <SpinnerCircular color={'#ffffff'} loading={loading} size={20} />
+          ) : (
+            'Sign Up'
+          )}
+              
+              
+              </button>
           </form>
         ) : (
           <form>
@@ -199,8 +235,8 @@ const Login = () => {
             <input
               type="password"
               placeholder="Password"
-              // pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.{8,})"
-              title="Password must be 8-12 characters long and include at least one lowercase letter, one uppercase letter, one numeric digit, and one special character (!@#$%^&*)"
+              //pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.{8,})"
+              title="Password must be 6-12 characters long and include at least one lowercase letter, one uppercase letter, one numeric digit, and one special character (!@#$%^&*)"
               required
               onChange={(e) => {
                 setloginPassword(e.target.value);

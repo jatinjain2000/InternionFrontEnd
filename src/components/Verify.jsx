@@ -20,7 +20,7 @@ export default function Verify() {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `http://compasslite.int.cyraacs.in/api/users/email/${email}`
+          `https://compasslite.int.cyraacs.in/api/users/email/${email}`
         );
         setVerify(response.data.verify_email);
         setSecret(response.data.secret);

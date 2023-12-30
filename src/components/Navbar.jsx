@@ -6,21 +6,24 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
- 
+
 export default function Navbar() {
-  const [isAdmin, setIsAdmin] = useState(localStorage.getItem("admin") === "true");
- 
+  const [isAdmin, setIsAdmin] = useState(
+    localStorage.getItem("admin") === "true"
+  );
+
   const navigateTo = useNavigate();
   const [isloggedIn, setIsLoggedIn] = useState(
     localStorage.getItem("userId") != null
   );
- 
+
+
   const logout = () => {
     localStorage.clear();
-    navigateTo("/login");
+    navigateTo("/");
     window.location.reload();
   };
- 
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static" style={{ backgroundColor: "#5c6bc0" }}>
@@ -80,6 +83,7 @@ export default function Navbar() {
               </Button>
             </>
           )}
+          
         </Toolbar>
       </AppBar>
     </Box>

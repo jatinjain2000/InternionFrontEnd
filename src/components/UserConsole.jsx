@@ -9,6 +9,7 @@ import {
 import { useState, useEffect } from "react";
 import axios from "axios";
 import UserModel from "./UserModel";
+import toast, { Toaster } from "react-hot-toast";
 
 function UserConsole() {
   const [data, setData] = useState([]);
@@ -16,17 +17,15 @@ function UserConsole() {
   const [showModal, setShowModal] = useState(false);
   const [users, setUsers] = useState([]);
 
-  const emailData = localStorage.getItem("userEmail") 
-  const email = emailData.substring(1, emailData.length - 1) 
+  const emailData = localStorage.getItem("userEmail");
+  const email = emailData.substring(1, emailData.length - 1);
   // console.log(email);
-
- 
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `http://compasslite.int.cyraacs.in/api/getfilebyemail/${email}`
+          `https://compasslite.int.cyraacs.in/api/getfilebyemail/${email}`
         );
 
         setData(response.data);
@@ -42,7 +41,9 @@ function UserConsole() {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await axios.get("http://compasslite.int.cyraacs.in/api/getdata");
+        const response = await axios.get(
+          "https://compasslite.int.cyraacs.in/api/getdata"
+        );
         setUsers(response.data);
 
         // console.log(response.data);
@@ -57,16 +58,33 @@ function UserConsole() {
   const handleSendPDF = () => {
     setShowModal(true);
   };
-  const upload = async () =>{
-    window.location.href = "http://compasslite.int.cyraacs.in/drive/googlesignin";
-    await axios.get("http://compasslite.int.cyraacs.in/drive/create/mktintumon@gmail.com");
-    alert("All files have been uploaded")
-  }
+
+  const upload = async () => {
+    try {
+      window.location.href =
+        "https://compasslite.int.cyraacs.in/drive/googlesignin";
+
+      await axios.get(
+        `https://compasslite.int.cyraacs.in/drive/create/${email}`
+      );
+
+      toast("All files have been uploaded", {
+        style: {
+          borderRadius: "10px",
+          background: "#333",
+          color: "#fff",
+        },
+      });
+    } catch (error) {
+      console.error("Error during upload:", error);
+      alert("Error during file upload");
+    }
+  };
 
   const downloadPDF = async (fileName, username) => {
     try {
       const response = await axios.get(
-        `http://compasslite.int.cyraacs.in/api/download?fileName=${fileName}&username=${username}`,
+        `https://compasslite.int.cyraacs.in/api/download?fileName=${fileName}&username=${username}`,
         {
           responseType: "blob",
         }
@@ -79,6 +97,14 @@ function UserConsole() {
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
+      toast(fileName + " Downloaded!", {
+        icon: "👏",
+        style: {
+          borderRadius: "10px",
+          background: "#333",
+          color: "#fff",
+        },
+      });
     } catch (error) {
       console.error("Error downloading PDF:", error);
     }
@@ -89,7 +115,6 @@ function UserConsole() {
   };
 
   const handleSendMail = (selectedUsers) => {
-    
     // console.log("Sending mail to selected users:", selectedUsers);
   };
 
@@ -155,13 +180,16 @@ const Box = ({
   handleCloseModal,
   handleSendMail,
   users,
-  upload
+  upload,
 }) => {
   const request = async () => {
-    await axios.post("http://compasslite.int.cyraacs.in/api/approveuserpermission", {
-      sender: username,
-      filename: filename,
-    });
+    await axios.post(
+      "https://compasslite.int.cyraacs.in/api/approveuserpermission",
+      {
+        sender: username,
+        filename: filename,
+      }
+    );
     alert("Mail has been sent to the admin for approval");
   };
 
@@ -252,6 +280,7 @@ const Box = ({
           </td>
         </tr>
       </MDBTableBody>
+      <Toaster />
     </>
   );
 };
